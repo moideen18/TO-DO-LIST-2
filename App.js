@@ -1,28 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import './App.css';
-import Task from "./component/Tasks"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./component/Register";
+import Tasks from "./component/Tasks";
 
-const App = () => {
+function App() {
   return (
     <Router>
-      <div>
-        {/* Navigation Bar */}
-        <nav className="navbar">
-          <ul className="nav-list">
-            <li>
-              <Link to="/task" className="nav-link">Task</Link>
-            </li>
-          </ul>
-        </nav>
+      <Routes>
+        <Route path="/" element={<Register />} />
 
-        {/* Routes for different pages */}
-        <Routes>
-          <Route path="/task" element={<Task />} />
-        </Routes>
-      </div>
+        
+        <Route path="/tasks" element={<Tasks />} />
+      </Routes>
     </Router>
   );
-};
+}
 
 export default App;
