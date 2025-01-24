@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Tasks.css";
-import backgroundImage from './paper.avif'; 
+import backgroundImage from "./pic.avif";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -8,17 +8,15 @@ function Tasks() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
-  const [history, setHistory] = useState([]); 
+  const [history, setHistory] = useState([]);
 
-  
   const saveToHistory = () => setHistory([...history, [...tasks]]);
 
-  
   const undoLastChange = () => {
     if (history.length === 0) return;
-    const previousState = history.pop(); 
-    setTasks(previousState); 
-    setHistory(history); 
+    const previousState = history.pop();
+    setTasks(previousState);
+    setHistory(history);
   };
 
   const addTask = () => {
@@ -26,13 +24,13 @@ function Tasks() {
       alert("Please enter a task.");
       return;
     }
-    saveToHistory(); 
+    saveToHistory();
     setTasks([...tasks, { text: task, completed: false }]);
     setTask("");
   };
 
   const toggleCompletion = (index) => {
-    saveToHistory(); 
+    saveToHistory();
     const updatedTasks = tasks.map((t, i) =>
       i === index ? { ...t, completed: !t.completed } : t
     );
@@ -40,7 +38,7 @@ function Tasks() {
   };
 
   const deleteTask = (index) => {
-    saveToHistory(); 
+    saveToHistory();
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   };
@@ -55,7 +53,7 @@ function Tasks() {
       alert("Task cannot be empty.");
       return;
     }
-    saveToHistory(); 
+    saveToHistory();
     const updatedTasks = tasks.map((t, i) =>
       i === index ? { ...t, text: editingText } : t
     );
@@ -65,13 +63,13 @@ function Tasks() {
   };
 
   const markAllCompleted = () => {
-    saveToHistory(); 
+    saveToHistory();
     const updatedTasks = tasks.map((t) => ({ ...t, completed: true }));
     setTasks(updatedTasks);
   };
 
   const deleteAllTasks = () => {
-    saveToHistory(); 
+    saveToHistory();
     setTasks([]);
   };
 
