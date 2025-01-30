@@ -1,10 +1,10 @@
 .app {
   font-family: Arial, sans-serif;
-  width: 100%;
+  width: 50%;
   max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  background: url('./pic.avif') no-repeat center center;
+  margin: 50px auto; 
+  padding: 20px 50px;
+  background: url('./hello.jpg') no-repeat center center;
   background-size: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
