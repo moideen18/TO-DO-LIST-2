@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Tasks.css";
-import backgroundImage from "./pic.avif";
+import backgroundImage from './hello.jpg';
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -8,27 +8,33 @@ function Tasks() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState([]); // Tracks task history for undo
 
-  const saveToHistory = () => setHistory([...history, [...tasks]]);
-
-  const undoLastChange = () => {
-    if (history.length === 0) return;
-    const previousState = history.pop();
-    setTasks(previousState);
-    setHistory(history);
+  // Save the current state to history
+  const saveToHistory = () => {
+    setHistory([...history, [...tasks]]);
   };
 
+  // Undo the last change
+  const undoLastChange = () => {
+    if (history.length === 0) return;
+    const previousState = history[history.length - 1];
+    setTasks(previousState);
+    setHistory(history.slice(0, -1));
+  };
+
+  // Add a new task (latest task appears at the top)
   const addTask = () => {
     if (task.trim() === "") {
       alert("Please enter a task.");
       return;
     }
     saveToHistory();
-    setTasks([...tasks, { text: task, completed: false }]);
+    setTasks([{ text: task, completed: false }, ...tasks]); // Insert at the beginning
     setTask("");
   };
 
+  // Toggle task completion
   const toggleCompletion = (index) => {
     saveToHistory();
     const updatedTasks = tasks.map((t, i) =>
@@ -37,17 +43,20 @@ function Tasks() {
     setTasks(updatedTasks);
   };
 
+  // Delete a task
   const deleteTask = (index) => {
     saveToHistory();
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   };
 
+  // Start editing a task
   const startEditing = (index) => {
     setEditingIndex(index);
     setEditingText(tasks[index].text);
   };
 
+  // Save the edited task
   const saveTask = (index) => {
     if (editingText.trim() === "") {
       alert("Task cannot be empty.");
@@ -62,21 +71,25 @@ function Tasks() {
     setEditingText("");
   };
 
+  // Mark all tasks as completed
   const markAllCompleted = () => {
     saveToHistory();
     const updatedTasks = tasks.map((t) => ({ ...t, completed: true }));
     setTasks(updatedTasks);
   };
 
+  // Delete all tasks
   const deleteAllTasks = () => {
     saveToHistory();
     setTasks([]);
   };
 
+  // Toggle showing completed tasks
   const toggleShowCompleted = () => {
     setShowCompleted(!showCompleted);
   };
 
+  // Filter tasks based on the completed toggle
   const displayedTasks = showCompleted
     ? tasks.filter((task) => task.completed)
     : tasks;
