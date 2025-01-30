@@ -1,73 +1,67 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; 
+import axios from "axios";
 import "./Register.css";
+import backgroundImage from "./paper.avif"; 
 
-function RegisterBox() {
-  const [formValues, setFormValues] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate();
+const Register = () => {
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
+  const navigate = useNavigate(); 
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = () => {
-    if (!formValues.username || !formValues.email || !formValues.password) {
-      alert("All fields are required!");
-      return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/users/register", formData);
+      alert(response.data.message);
+      setFormData({ username: "", email: "", password: "" });
+
+      navigate("/tasks");
+    } catch (error) {
+      alert(error.response?.data?.message || "An error occurred");
     }
-    alert(`Registered successfully!\nUsername: ${formValues.username}\nEmail: ${formValues.email}`);
-    navigate("/tasks"); 
   };
 
   return (
-    <div className="register-box">
-      <h2>Sign Up</h2>
-      <div className="form-field">
-        <label htmlFor="username">Username:</label>
+    <div className="register-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          id="username"
           name="username"
-          value={formValues.username}
-          onChange={handleInputChange}
-          placeholder="Enter your username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+          required
         />
-      </div>
-      <div className="form-field">
-        <label htmlFor="email">Email:</label>
         <input
           type="email"
-          id="email"
           name="email"
-          value={formValues.email}
-          onChange={handleInputChange}
-          placeholder="Enter your email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
         />
-      </div>
-      <div className="form-field">
-        <label htmlFor="password">Password:</label>
         <input
           type="password"
-          id="password"
           name="password"
-          value={formValues.password}
-          onChange={handleInputChange}
-          placeholder="Enter your password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
         />
-      </div>
-      <button className="register-btn" onClick={handleRegister}>
-        Register
-      </button>
+        <button type="submit">Register</button>
+      </form>
+      
+      <p className="login-link">
+        Already have an account? <Link to="/Login">Login here</Link>
+      </p>
     </div>
   );
-}
+};
 
-export default RegisterBox;
+export default Register;
